@@ -4,7 +4,7 @@ from advent import AdventDay
 class Day2(AdventDay):
 
     def __init__(self):
-        super().__init__(2)
+        super().__init__(2021, 2)
 
     def part_1(self):
         inp = self.split_types(types=(str, int))

@@ -5,12 +5,12 @@ import re
 
 
 class AdventDay:
-    _YEAR = 2021
 
-    def __init__(self, day):
+    def __init__(self, year, day):
         # URLs
+        self.year = year
         self.day = day
-        self.base_url = 'https://adventofcode.com/%s/day/%s' % (self._YEAR, day)
+        self.base_url = 'https://adventofcode.com/%s/day/%s' % (year, day)
 
         self.session = requests.Session()
 
@@ -28,12 +28,24 @@ class AdventDay:
         self.day_input = r.text
 
     def submit(self, submission, level):
-        return 'Yep'
-        pass
+        data = {
+            'level': level,
+            'answer': submission
+        }
+
+        r = self.session.post(self.base_url + '/answer', data=data)
+        if 'That\'s not the right answer' in r.text:
+            print(' * Sowwy u got it wrong >w<, don\'t lose hope though, you got this!!')
+
+        elif 'You gave an answer too recently' in r.text:
+            print(' * You gave an answer too recently')
+
+        else:
+            print(' * You got it right!!! one more star for you UwU')
 
     def main(self):
         f = Figlet(justify='center')
-        print(f.renderText('DAY: %s' % self.day))
+        print(f.renderText('%s - DAY %s' % (self.year, self.day)))
         for i in '12':
             print(f' * Now solving part {i}!!')
             if i == '1':
@@ -46,7 +58,8 @@ class AdventDay:
 
             if should_submit == 'y' or should_submit == 'y':
                 print(f' * Now submitting part {i} to aoc')
-                result = self.submit(solution, 1)
+                self.submit(solution, i)
+
         print(' * All finished!! I hope you have a lovely day!')
 
     def part_1(self):

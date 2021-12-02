@@ -4,7 +4,7 @@ from advent import AdventDay
 class Day1(AdventDay):
 
     def __init__(self):
-        super().__init__(1)
+        super().__init__(2021, 1)
 
     def part_1(self):
         inp = self.parse_ints(one_per_line=True)
