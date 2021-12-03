@@ -69,6 +69,13 @@ class AdventDay:
         return 'UNDEFINED'
 
     # Helper functions:
+    def read_line(self, line_type=str):
+        # Basic read lines function
+        if line_type == bin:
+            line_type = lambda x: int(x, 2)
+
+        return [line_type(i) for i in self.day_input.split('\n') if i]
+
     def parse_ints(self, one_per_line=False):
         # Get a list of ints per line for every line in the input
         if one_per_line:
@@ -82,7 +89,7 @@ class AdventDay:
 
             return lines
 
-    def split_types(self, delim=' ', types=(str, str)):
+    def split_types(self, delim=' ', types=(str,)):
         # Split each line and convert to the specified types
         out_list = []
 
