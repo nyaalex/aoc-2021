@@ -82,8 +82,6 @@ class Day4(AdventDay):
             boards = new_boards
 
 
-
-
 if __name__ == '__main__':
     d4 = Day4()
     d4.main()
