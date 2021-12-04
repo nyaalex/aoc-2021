@@ -28,6 +28,7 @@ class BingoBoard:
 
         if 5 in (self._lines[y + 5], self._lines[x]):
             return sum(self._unmarked) * num
+
         else:
             return 0
 
