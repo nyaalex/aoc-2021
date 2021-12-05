@@ -15,8 +15,8 @@ class AdventDay:
         self.session = requests.Session()
 
         # Read secret cookie
-        dir_path = os.path.dirname(os.path.realpath(__file__))
-        with open(os.path.join(dir_path, 'SECRET_COOKIE'), 'r') as cookie_file:
+        self.dir_path = os.path.dirname(os.path.realpath(__file__))
+        with open(os.path.join(self.dir_path, 'SECRET_COOKIE'), 'r') as cookie_file:
             secret_cookie = cookie_file.read().strip()
 
         # Set our cookie
@@ -24,8 +24,22 @@ class AdventDay:
         c.set('session', secret_cookie, domain='adventofcode.com')
 
         # Now get the input as text
-        r = self.session.get(self.base_url + '/input')
-        self.day_input = r.text
+        self.day_input = ''
+        self.get_input()
+
+    def get_input(self):
+        # check if its been downloaded to the cache
+        cache_pathname = os.path.join(self.dir_path, '.cache', '%s-%02d-input.txt' % (self.year, self.day))
+        if os.path.exists(cache_pathname):
+            with open(cache_pathname) as cache_file:
+                self.day_input = cache_file.read()
+
+        else:
+            r = self.session.get(self.base_url + '/input')
+            self.day_input = r.text
+
+            with open(cache_pathname, 'x') as cache_file:
+                cache_file.write(self.day_input)
 
     def submit(self, submission, level):
         data = {
@@ -52,6 +66,10 @@ class AdventDay:
                 solution = self.part_1()
             else:
                 solution = self.part_2()
+
+            if solution is None:
+                print(f' * No solution for part {i}')
+                continue
 
             print(f' * We got a returned  value of {solution}, would you like to submit this answer? (y/n)')
             should_submit = input(':')
@@ -85,7 +103,8 @@ class AdventDay:
             lines = []
             for line in self.day_input.split('\n'):
                 all_ints = re.findall("\\d+", line)
-                lines.append(list(map(int, all_ints)))
+                if all_ints:
+                    lines.append(list(map(int, all_ints)))
 
             return lines
 
