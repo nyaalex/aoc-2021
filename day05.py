@@ -6,24 +6,26 @@ class Day5(AdventDay):
     def __init__(self):
         super().__init__(2021, 5)
 
-    def part_1(self):
+    def find_intersections(self, ignore_diagonals):
         inp = self.parse_ints()
         seen = set()
         intersection = set()
 
         for x1, y1, x2, y2 in inp:
 
-            if x1 == x2:
-                start = min(y1, y2)
-                end = y1+y2 - start
-                line_range = ((x1, i) for i in range(start, end+1))
-            elif y1 == y2:
-                start = min(x1, x2)
-                end = x1+x2 - start
-                line_range = ((i, y1) for i in range(start, end+1))
-            else:
+            if x1 != x2 and y1 != y2 and ignore_diagonals:
                 continue
 
+            dx = x2 - x1
+            x_sign = min(1, max(dx, -1))
+            x_distance = abs(dx)
+
+            dy = y2 - y1
+            y_sign = min(1, max(dy, -1))
+            y_distance = abs(dy)
+
+            line_range = ((x1 + i * x_sign, y1 + i * y_sign) for i in range(max(x_distance, y_distance) + 1))
+
             for coord in line_range:
                 if coord in seen:
                     intersection.add(coord)
@@ -31,39 +33,13 @@ class Day5(AdventDay):
                     seen.add(coord)
 
         return len(intersection)
+
+    def part_1(self):
+        return self.find_intersections(ignore_diagonals=True)
+
         
     def part_2(self):
-        inp = self.parse_ints()
-        seen = set()
-        intersection = set()
-
-        for x1, y1, x2, y2 in inp:
-
-            if x1 == x2:
-                start = min(y1, y2)
-                end = y1+y2 - start
-                line_range = ((x1, i) for i in range(start, end+1))
-            elif y1 == y2:
-                start = min(x1, x2)
-                end = x1+x2 - start
-                line_range = ((i, y1) for i in range(start, end+1))
-            else:
-                top_x, top_y = min((x1, y1), (x2, y2), key=lambda x: x[1])
-                bottom_x = x1+x2 - top_x
-                dx = bottom_x - top_x
-
-                sign = -1 if dx < 0 else 1
-                distance = abs(dx)
-
-                line_range = ((top_x + sign * i, top_y + i) for i in range(distance+1))
-
-            for coord in line_range:
-                if coord in seen:
-                    intersection.add(coord)
-                else:
-                    seen.add(coord)
-
-        return len(intersection)
+        return self.find_intersections(ignore_diagonals=False)
 
 
 if __name__ == '__main__':
