@@ -37,7 +37,6 @@ class Day5(AdventDay):
     def part_1(self):
         return self.find_intersections(ignore_diagonals=True)
 
-        
     def part_2(self):
         return self.find_intersections(ignore_diagonals=False)
 

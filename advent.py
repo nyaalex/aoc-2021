@@ -81,10 +81,10 @@ class AdventDay:
         print(' * All finished!! I hope you have a lovely day!')
 
     def part_1(self):
-        return 'UNDEFINED'
+        pass
 
     def part_2(self):
-        return 'UNDEFINED'
+        pass
 
     # Helper functions:
     def read_line(self, line_type=str):
