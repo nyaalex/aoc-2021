@@ -31,6 +31,7 @@ class Day7(AdventDay):
         return self.solve(part=2)
 
 
+
 if __name__ == '__main__':
     d7 = Day7()
     d7.main()
