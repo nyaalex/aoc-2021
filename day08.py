@@ -22,39 +22,38 @@ class Day8(AdventDay):
 
     @staticmethod
     def decode(int_codes):
-        vals = [0 for _ in range(10)]
+        code = [0 for _ in range(10)]
 
         for i in int_codes:
             if Day8.count_bits(i) == 2:
-                vals[1] = i
+                code[1] = i
             elif Day8.count_bits(i) == 3:
-                vals[7] = i
+                code[7] = i
             elif Day8.count_bits(i) == 4:
-                vals[4] = i
+                code[4] = i
             elif Day8.count_bits(i) == 7:
-                vals[8] = i
+                code[8] = i
 
         # 4 down, 6 to go
         # I'd like to make the note here that every one of these rules was worked out by hand, this will decode
-        # accurately but the reason why is that it just does
+        # accurately but the precise reasoning why is specific per number, and I cba to explain
         for i in int_codes:
             if Day8.count_bits(i) == 5:
-                if i & vals[1] == vals[1]:
-                    vals[3] = i
-                elif Day8.count_bits(i ^ vals[4]) == 5:
-                    vals[2] = i
+                if i & code[1] == code[1]:
+                    code[3] = i
+                elif Day8.count_bits(i ^ code[4]) == 5:
+                    code[2] = i
                 else:
-                    vals[5] = i
+                    code[5] = i
             elif Day8.count_bits(i) == 6:
-                if Day8.count_bits(i ^ vals[1]) == 6:
-                    vals[6] = i
-                elif Day8.count_bits(i ^ vals[4]) == 4:
-                    vals[0] = i
+                if Day8.count_bits(i ^ code[1]) == 6:
+                    code[6] = i
+                elif Day8.count_bits(i ^ code[4]) == 4:
+                    code[0] = i
                 else:
-                    vals[9] = i
+                    code[9] = i
 
-        final_lookup = dict([(v, i) for i, v in enumerate(vals)])
-        return final_lookup
+        return dict([(v, i) for i, v in enumerate(code)])
 
     def part_1(self):
         inp = self.split_types(delim=' | ', types=(str, str))
@@ -74,14 +73,14 @@ class Day8(AdventDay):
             int_code = [self.convert_to_int(i) for i in encoding.split()]
             true_encoding = self.decode(int_code)
 
-            v = 0
+            decoded_number = 0
             for i in encoded.split():
-                v *= 10
+                decoded_number *= 10
                 code = self.convert_to_int(i)
                 val = true_encoding[code]
-                v += val
+                decoded_number += val
 
-            total += v
+            total += decoded_number
 
         return total
 
