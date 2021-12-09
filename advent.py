@@ -27,6 +27,17 @@ class AdventDay:
         self.day_input = ''
         self.get_input()
 
+        # Define some useful constants
+        self.v_neighbours = [
+            (0, -1),
+            (1, 0),
+            (0, 1),
+            (-1, 0),
+        ]
+
+        # Moore neighbourhood
+        self.m_neighbours = [(i // 3 - 1, i % 3 - 1) for i in range(9) if i != 4]
+
     def get_input(self):
         # check if its been downloaded to the cache
         cache_pathname = os.path.join(self.dir_path, '.cache', '%s-%02d-input.txt' % (self.year, self.day))
@@ -54,8 +65,10 @@ class AdventDay:
         elif 'You gave an answer too recently' in r.text:
             print(' * You gave an answer too recently')
 
-        else:
+        elif 'That\'s the right answer' in r.text:
             print(' * You got it right!!! one more star for you UwU')
+        else:
+            print(' * Already Submitted')
 
     def main(self):
         f = Figlet(justify='center')
@@ -87,7 +100,7 @@ class AdventDay:
         pass
 
     # Helper functions:
-    def read_line(self, line_type=str):
+    def read_lines(self, line_type=str):
         # Basic read lines function
         if line_type == bin:
             line_type = lambda x: int(x, 2)

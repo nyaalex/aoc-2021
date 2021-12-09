@@ -7,7 +7,7 @@ class Day3(AdventDay):
         super().__init__(2021, 3)
 
     def part_1(self):
-        inp = self.read_line(bin)
+        inp = self.read_lines(bin)
 
         gamma = 0
         for i in range(12):
@@ -23,7 +23,7 @@ class Day3(AdventDay):
         return gamma * epsilon
 
     def part_2(self):
-        inp = self.read_line(bin)
+        inp = self.read_lines(bin)
         co2 = inp.copy()
         oxygen = inp.copy()
 
