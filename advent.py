@@ -137,3 +137,27 @@ class AdventDay:
             out_list.append(tuple(fields))
 
         return out_list
+
+    @staticmethod
+    def get_neighbours(coord, size, von_neumann=False, border='end'):
+
+        x, y = coord
+        max_x, max_y = size
+
+        if von_neumann:
+            n_hood = [(-1, 0), (0, -1), (1, 0), (0, 1)]
+        else:
+            n_hood = [(i % 3 - 1, i//3 - 1) for i in range(9) if i != 4]
+
+        for dx, dy in n_hood:
+            nx, ny = x + dx, y + dy
+
+            if nx < 0 or nx > max_x or ny < 0 or ny > max_y:
+                if border == 'end':
+                    continue
+                elif border == 'wrap':
+                    nx %= max_x
+                    ny %= max_y
+
+            yield nx, ny
+
