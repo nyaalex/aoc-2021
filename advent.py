@@ -110,12 +110,12 @@ class AdventDay:
     def parse_ints(self, one_per_line=False):
         # Get a list of ints per line for every line in the input
         if one_per_line:
-            all_ints = re.findall("\\d+", self.day_input)
+            all_ints = re.findall("-?\\d+", self.day_input)
             return list(map(int, all_ints))
         else:
             lines = []
             for line in self.day_input.split('\n'):
-                all_ints = re.findall("\\d+", line)
+                all_ints = re.findall("-?\\d+", line)
                 if all_ints:
                     lines.append(list(map(int, all_ints)))
 
