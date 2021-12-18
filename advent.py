@@ -121,7 +121,7 @@ class AdventDay:
 
             return lines
 
-    def split_types(self, delim=' ', types=(str,)):
+    def split_types(self, delim=' ', types=(str, str)):
         # Split each line and convert to the specified types
         out_list = []
 
