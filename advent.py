@@ -138,6 +138,10 @@ class AdventDay:
 
         return out_list
 
+    def int_grid(self):
+        # Read input as a 2d grid of single digit integers
+        return [[int(i) for i in line] for line in self.read_lines()]
+
     @staticmethod
     def get_neighbours(coord, size, von_neumann=False, border='end'):
 

@@ -56,7 +56,7 @@ class Day8(AdventDay):
         return dict([(v, i) for i, v in enumerate(code)])
 
     def part_1(self):
-        inp = self.split_types(delim=' | ', types=(str, str))
+        inp = self.split_types(' | ')
         total = 0
         for encoding, encoded in inp:
             for i in encoded.split():
@@ -66,7 +66,7 @@ class Day8(AdventDay):
         return total
         
     def part_2(self):
-        inp = self.split_types(delim=' | ', types=(str, str))
+        inp = self.split_types(' | ')
         total = 0
 
         for encoding, encoded in inp:

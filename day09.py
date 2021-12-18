@@ -53,8 +53,7 @@ class Day9(AdventDay):
         super().__init__(2021, 9)
 
     def part_1(self):
-        inp = self.read_lines()
-        heightmap = [[int(i) for i in line] for line in inp]
+        heightmap = self.int_grid()
 
         l_points = get_low_points(heightmap)
 
@@ -65,8 +64,7 @@ class Day9(AdventDay):
         return total
 
     def part_2(self):
-        inp = self.read_lines()
-        heightmap = [[int(i) for i in line] for line in inp]
+        heightmap = self.int_grid()
 
         l_points = get_low_points(heightmap)
         basin_sizes = []

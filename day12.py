@@ -33,7 +33,7 @@ class Day12(AdventDay):
         super().__init__(2021, 12)
 
     def build_graph(self):
-        inp = self.split_types('-', (str, str))
+        inp = self.split_types('-')
 
         graph = {}
         for s, e in inp:

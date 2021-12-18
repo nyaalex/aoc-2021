@@ -7,7 +7,7 @@ class Day14(AdventDay):
         super().__init__(2021, 14)
 
     def get_rule(self):
-        rules = self.split_types(' -> ', (str, str))
+        rules = self.split_types(' -> ')
         rule_lookup = {}
 
         for pair, insert in rules:

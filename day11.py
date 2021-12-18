@@ -44,7 +44,7 @@ class Day11(AdventDay):
         super().__init__(2021, 11)
 
     def part_1(self):
-        inp = [[int(i) for i in line] for line in self.read_lines()]
+        inp = self.int_grid()
         octopi = OctoGrid(inp)
 
         for _ in range(100):
@@ -53,7 +53,7 @@ class Day11(AdventDay):
         return octopi.flashes
 
     def part_2(self):
-        inp = [[int(i) for i in line] for line in self.read_lines()]
+        inp = self.int_grid()
         octopi = OctoGrid(inp)
 
         turn_count = 0
