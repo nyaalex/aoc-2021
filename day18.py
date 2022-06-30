@@ -8,6 +8,11 @@ class SnailPair:
     def __repr__(self):
         return '[%s,%s]' % (repr(self.left), repr(self.right))
 
+    def debug_string(self, depth=0):
+        return '[%s%s,%s]' % ('!' if depth > 3 else '',
+                              self.left.debug_string(depth + 1),
+                              self.right.debug_string(depth + 1))
+
     def __init__(self, left, right):
         self.left = left
         self.right = right
@@ -33,8 +38,8 @@ class SnailPair:
         elif side == self.RIGHT:
             self.right.base_add(value, side)
 
-    def reduce_step(self, depth=0):
-        changed, data = self.left.reduce_step(depth+1)
+    def explode_step(self, depth=0):
+        changed, data = self.left.explode_step(depth + 1)
         if changed:
             if data:
                 val, side = data
@@ -50,11 +55,13 @@ class SnailPair:
             self.right.base_add(right, self.LEFT)
             return True, (left, self.LEFT)
 
-        if self.left.can_split():
-            self.left = self.left.split()
-            return True, None
+        if self.right.can_explode() and depth >= 3:
+            left, right = self.right.explode()
+            self.right = SnailBase(0)
+            self.left.base_add(left, self.RIGHT)
+            return True, (right, self.RIGHT)
 
-        changed, data = self.right.reduce_step(depth + 1)
+        changed, data = self.right.explode_step(depth + 1)
         if changed:
             if data:
                 val, side = data
@@ -63,35 +70,46 @@ class SnailPair:
                     return True, None
             return True, data
 
-        if self.right.can_explode() and depth >= 3:
-            left, right = self.right.explode()
-            self.right = SnailBase(0)
-            self.left.base_add(left, self.RIGHT)
-            return True, (right, self.RIGHT)
+        return False, None
+
+    def split_step(self, depth=0):
+        changed = self.left.split_step(depth + 1)
+        if changed:
+            return True
+
+        if self.left.can_split():
+            self.left = self.left.split()
+            return True
 
         if self.right.can_split():
             self.right = self.right.split()
-            return True, None
+            return True
 
-        return False, None
+        changed = self.right.split_step(depth + 1)
+        if changed:
+            return True
 
     def add(self, other):
         l, r = self.left, self.right
         self.left = SnailPair(l, r)
         self.right = other
 
-        steps = []
         changed = True
         while changed:
-            steps.append(repr(self))
-            changed, _ = self.reduce_step()
 
-        return steps
+            changed, _ = self.explode_step()
+            if changed:
+                continue
+            else:
+                changed = self.split_step()
 
 
 class SnailBase(SnailPair):
 
     def __repr__(self):
+        return repr(self.value)
+
+    def debug_string(self, depth=0):
         return repr(self.value)
 
     def __init__(self, value):
@@ -100,7 +118,7 @@ class SnailBase(SnailPair):
         self.base = True
 
     def get_magnitude(self):
-        return self.base
+        return self.value
 
     def can_split(self):
         return self.value > 9
@@ -112,13 +130,16 @@ class SnailBase(SnailPair):
         self.value += value
 
     def split(self):
-        left = self.value//2
+        left = self.value // 2
         right = self.value - left
         left, right = SnailBase(left), SnailBase(right)
         return SnailPair(left, right)
 
-    def reduce_step(self, depth=0):
+    def explode_step(self, depth=0):
         return False, None
+
+    def split_step(self, depth=0):
+        return False
 
 
 def parse_pair(pairs):
@@ -165,25 +186,26 @@ class Day18(AdventDay):
 
         for line in inp:
             first.add(parse_pair(line))
-            print(first)
 
-        print(first)
         return first.get_magnitude()
 
     def part_2(self):
-        pass
+        inp = self.read_lines()
+
+        max_add = 0
+        for x in inp:
+            for y in inp:
+                tmp = parse_pair(x)
+                tmp.add(parse_pair(y))
+                max_add = max(max_add, tmp.get_magnitude())
+
+                tmp = parse_pair(y)
+                tmp.add(parse_pair(x))
+                max_add = max(max_add, tmp.get_magnitude())
+
+        return max_add
 
 
 if __name__ == '__main__':
     d18 = Day18()
-    d18.day_input = '''[[[0,[4,5]],[0,0]],[[[4,5],[2,6]],[9,5]]]
-[7,[[[3,7],[4,3]],[[6,3],[8,8]]]]'''
-# [[2,[[0,8],[3,4]]],[[[6,7],1],[7,[1,6]]]]
-# [[[[2,4],7],[6,[0,5]]],[[[6,8],[2,8]],[[2,1],[4,5]]]]
-# [7,[5,[[3,8],[1,4]]]]
-# [[2,[2,2]],[8,[8,1]]]
-# [2,9]
-# [1,[[[9,3],9],[[9,0],[0,7]]]]
-# [[[5,[7,4]],7],1]
-# [[[[4,2],2],6],[8,7]]'''
     d18.main()

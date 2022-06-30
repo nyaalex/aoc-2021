@@ -143,7 +143,7 @@ class AdventDay:
         return [[int(i) for i in line] for line in self.read_lines()]
 
     @staticmethod
-    def get_neighbours(coord, size, von_neumann=False, border='end'):
+    def get_neighbours(coord, size, von_neumann=False, wrap=False):
 
         x, y = coord
         max_x, max_y = size
@@ -157,11 +157,11 @@ class AdventDay:
             nx, ny = x + dx, y + dy
 
             if nx < 0 or nx > max_x or ny < 0 or ny > max_y:
-                if border == 'end':
-                    continue
-                elif border == 'wrap':
+                if wrap:
                     nx %= max_x
                     ny %= max_y
+                else:
+                    continue
 
             yield nx, ny
 
