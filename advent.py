@@ -1,3 +1,5 @@
+import math
+
 import requests
 import os
 from pyfiglet import Figlet
@@ -141,6 +143,13 @@ class AdventDay:
     def int_grid(self):
         # Read input as a 2d grid of single digit integers
         return [[int(i) for i in line] for line in self.read_lines()]
+
+    @staticmethod
+    def distance(a, b, manhattan=True):
+        if manhattan:
+            return sum([abs(a_i - b_i) for a_i, b_i in zip(a, b)])
+        else:
+            return math.sqrt(sum([(a_i - b_i)**2 for a_i, b_i in zip(a, b)]))
 
     @staticmethod
     def get_neighbours(coord, size, von_neumann=False, wrap=False):
